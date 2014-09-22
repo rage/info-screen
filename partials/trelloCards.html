@@ -1,0 +1,14 @@
+<div class="cards">
+    <div class="card" ng-repeat="card in cards">
+        <span class="name">
+            <span class="labels" ng-if="card.labels.length">
+                <span ng-repeat="label in card.labels" ng-style="{'background-color': label.color}">&nbsp;</span>
+            </span>
+            {{ card.name }}   
+        </span>
+
+        <span class="badge" ng-if="card.badges.comments"><i class="fa fa-comments"></i> {{ card.badges.comments }} </span>
+
+        <img class="avatar" ng-repeat="member in card.members" ng-src="https://trello-avatars.s3.amazonaws.com/{{member.avatarHash}}/50.png">
+    </div>
+</div>

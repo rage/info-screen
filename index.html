@@ -2,30 +2,30 @@
 <html ng-app="infoScreenApp">
 <head>
     <title>INFFOO</title>
-    <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='infoscreen.css' rel='stylesheet' type='text/css'>
+    <link href='css/infoscreen.css' rel='stylesheet' type='text/css'>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://api.trello.com/1/client.js?key=ca541714b2c13a50aac41b46f324df04"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular.js"></script>
-    <script src="infoscreen.js"></script>
+    <script src="js/infoscreen.js"></script>
 </head>
 
 <body ng-controller="InfoScreenCtrl">
-    <div class="cards">
-        <div class="card" ng-repeat="card in cards">
-            <span class="name">
-                <span class="labels" ng-if="card.labels.length">
-                    <span ng-repeat="label in card.labels" ng-style="{'background-color': label.color}">&nbsp;</span>
-                </span>
-                {{ card.name }}   
-            </span>
 
-            <span class="badge" ng-if="card.badges.comments"><i class="fa fa-comments"></i> {{ card.badges.comments }} </span>
+    <transitionpages transition-interval="10000">
+        <transitionpage>
+            <h1>Currently doing</h1>
 
-            <img class="avatar" ng-repeat="member in card.members" ng-src="https://trello-avatars.s3.amazonaws.com/{{member.avatarHash}}/50.png">
-        </div>
-    </div>
+            <trellocards cards="doingCards"></trellocards>
+        </transitionpage>
+
+        <transitionpage>
+            <h1>MOOC</h1>
+
+            <trellocards cards="moocCards"></trellocards>
+        </transitionpage>
+    </transitionpages>    
 </body>
 
 </html>
