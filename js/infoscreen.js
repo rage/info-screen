@@ -1,5 +1,3 @@
-var LIST_ID = "53f47cc6966bb91ba14291b7";
-
 var infoScreenApp = angular.module('infoScreenApp', []);
 
 infoScreenApp.service('TrelloService', function($rootScope) {
@@ -19,6 +17,7 @@ infoScreenApp.service('TrelloService', function($rootScope) {
 infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService) {
 	$scope.doingCards = [];
 	$scope.moocCards = [];
+	$scope.todoCards = [];
 
 	function update() {
 		TrelloService.getCards("53f47cc6966bb91ba14291b7", function(res) {
@@ -27,6 +26,10 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
 
 		TrelloService.getCards("53fa168af8454125a3d17e12", function(res) {
 			$scope.moocCards = res;
+		});
+
+		TrelloService.getCards("53f47cc6966bb91ba14291b6", function(res) {
+			$scope.todoCards = res;
 		});
 	}
 
@@ -52,9 +55,11 @@ infoScreenApp.directive('transitionpages', function() {
 		},
 		transclude: true,
 		template: '<div ng-transclude></div>',
+
 		link: function(scope, element, attrs) {
 			element.addClass("pt-perspective");
 		},
+		
 		controller: function($scope, $interval) {
 			var pages = [];
 			var currentPage = 0;
