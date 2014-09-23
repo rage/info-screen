@@ -17,20 +17,20 @@
 <body ng-controller="InfoScreenCtrl">
     <current-time format="EEE d.M. HH:mm"></current-time>
 
-    <transitionpages transition-interval="10000">
-        <transitionpage>
+    <transition-pages transition-interval="10000">
+        <transition-page>
             <h1>Currently doing</h1>
 
-            <trellocards cards="doingCards"></trellocards>
-        </transitionpage>
+            <trello-cards cards="doingCards"></trello-cards>
+        </transition-page>
 
-        <transitionpage>
+        <transition-page>
             <h1>MOOC</h1>
 
-            <trellocards cards="moocCards"></trellocards>
-        </transitionpage>
+            <trello-cards cards="moocCards"></trello-cards>
+        </transition-page>
 
-        <transitionpage>
+        <transition-page>
             <h1>GitHub activity</h1>
 
             <div class="cards">
@@ -58,9 +58,9 @@
                     <span class="badge" am-time-ago="event.created_at"></span>
                 </div>
             </div>
-        </transitionpage>
+        </transition-page>
 
-        <transitionpage>
+        <transition-page>
             <h1>Unicafe Exactum</h1>
 
             <div class="cards">
@@ -68,9 +68,9 @@
                     {{ dish }}
                 </div>
             </div>
-        </transitionpage>
+        </transition-page>
 
-        <transitionpage>
+        <transition-page>
             <h1>Unicafe Chemicum</h1>
 
             <div class="cards">
@@ -78,8 +78,8 @@
                     {{ dish }}
                 </div>
             </div>
-        </transitionpage>
-    </transitionpages>
+        </transition-page>
+    </transition-pages>
 </body>
 
 </html>

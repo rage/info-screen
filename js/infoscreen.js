@@ -84,7 +84,7 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
     update();
 });
 
-infoScreenApp.directive('trellocards', function() {
+infoScreenApp.directive('trelloCards', function() {
     return {
         restrict: 'E',
         scope: {
@@ -126,7 +126,7 @@ infoScreenApp.directive('currentTime', ['$interval', 'dateFilter', function($int
     };
 }]);
 
-infoScreenApp.directive('transitionpages', function() {
+infoScreenApp.directive('transitionPages', function() {
     return {
         restrict: 'E',
         scope: {
@@ -179,7 +179,7 @@ infoScreenApp.filter('capitalize', function() {
     };
 });
 
-infoScreenApp.directive('transitionpage', function() {
+infoScreenApp.directive('transitionPage', function() {
     function link(scope, element, attrs, pagesCtrl) {
         if (!pagesCtrl.isPages()) {
             element.addClass("pt-page-current");
@@ -189,7 +189,7 @@ infoScreenApp.directive('transitionpage', function() {
     }
 
     return {
-        require: '^transitionpages',
+        require: '^transitionPages',
         restrict: 'E',
         transclude: true,
         template: '<div ng-transclude></div>',
