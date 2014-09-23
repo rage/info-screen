@@ -137,6 +137,15 @@ infoScreenApp.directive('transitionpages', function() {
     };
 });
 
+/*
+ * From http://codepen.io/WinterJoey/pen/sfFaK
+ */
+infoScreenApp.filter('capitalize', function() {
+    return function(input, all) {
+        return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) : '';
+    };
+});
+
 infoScreenApp.directive('transitionpage', function() {
     function link(scope, element, attrs, pagesCtrl) {
         if (!pagesCtrl.isPages()) {
