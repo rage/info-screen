@@ -18,8 +18,8 @@ infoScreenApp.service('GitHubService', function($http) {
     var GITHUB_ROOT = 'https://api.github.com';
 
     return {
-        getCommits: function(owner, repo) {
-            return $http.get(GITHUB_ROOT + '/repos/' + owner + '/' + repo + '/commits');
+        getEvents: function(org) {
+            return $http.get(GITHUB_ROOT + '/orgs/' + org + '/events');
         }
     };
 });
@@ -27,8 +27,11 @@ infoScreenApp.service('GitHubService', function($http) {
 infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService) {
     $scope.doingCards = [];
     $scope.moocCards = [];
-    $scope.todoCards = [];
-    $scope.cbBackendCommits = [];
+    $scope.gitHubEvents = [];
+
+    $scope.extractRepoName = function(name) {
+        return name.split('/')[1];
+    };
 
     function update() {
         TrelloService.getCards("53f47cc6966bb91ba14291b7", function(res) {
@@ -39,12 +42,8 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
             $scope.moocCards = res;
         });
 
-        TrelloService.getCards("53f47cc6966bb91ba14291b6", function(res) {
-            $scope.todoCards = res;
-        });
-
-        GitHubService.getCommits("kesapojat", "codebrowser-back-end").success(function(res) {
-            $scope.cbBackendCommits = res;
+        GitHubService.getEvents("kesapojat").success(function(res) {
+            $scope.gitHubEvents = res;
         });
     }
 

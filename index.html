@@ -30,19 +30,17 @@
         </transitionpage>
 
         <transitionpage>
-            <h1>TODO</h1>
-
-            <trellocards cards="todoCards"></trellocards>
-        </transitionpage>
-
-        <transitionpage>
-            <h1>Commits</h1>
+            <h1>GitHub activity</h1>
 
             <div class="cards">
-                <div class="card" ng-repeat="commit in cbBackendCommits | limitTo:5">
-                    <span class="name">{{ commit.commit.message }}</span>
-                    <img class="avatar" ng-src="{{ commit.author.avatar_url }}">
-                    <span class="badge" am-time-ago="commit.commit.committer.date"></span>
+                <div class="card" ng-repeat="event in gitHubEvents | limitTo:10">
+                    <span ng-if="event.type == 'PushEvent'">
+                        {{ event.payload.commits[0].message }}
+                        <span class="badge" ng-if="event.payload.commits.length > 1">+{{event.payload.commits.length - 1}} more</span>
+                    </span>
+                    <span class="badge">[{{ extractRepoName(event.repo.name) }}]</span>
+                    <img class="avatar" ng-src="{{ event.actor.avatar_url }}">
+                    <span class="badge" am-time-ago="event.created_at"></span>
                 </div>
             </div>
         </transitionpage>
