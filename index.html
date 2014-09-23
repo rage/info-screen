@@ -35,15 +35,23 @@
 
             <div class="cards">
                 <div class="card" ng-repeat="event in gitHubEvents | limitTo:10">
-                    <span ng-if="event.type == 'PushEvent'">
-                        {{ event.payload.commits[0].message }}
-                        <span class="badge" ng-if="event.payload.commits.length > 1">+{{event.payload.commits.length - 1}} more</span>
-                    </span>
-                    <span ng-if="event.type == 'IssuesEvent'">
-                        {{ event.payload.action | capitalize }} issue "{{ event.payload.issue.title }}"
-                    </span>
-                    <span ng-if="event.type == 'IssueCommentEvent'">
-                        {{ event.payload.action | capitalize }} comment on "{{ event.payload.issue.title }}"
+                    <span ng-switch="event.type">
+                        <span ng-switch-when="PushEvent">
+                            {{ event.payload.commits[0].message }}
+                            <span class="badge" ng-if="event.payload.commits.length > 1">+{{event.payload.commits.length - 1}} more</span>
+                        </span>
+                        <span ng-switch-when="IssuesEvent">
+                            {{ event.payload.action | capitalize }} issue "{{ event.payload.issue.title }}"
+                        </span>
+                        <span ng-switch-when="IssueCommentEvent">
+                            <span ng-if="event.payload.action == 'created'">
+                                Commented
+                            </span>
+                            <span ng-if="event.payload.action != 'created'">
+                                {{ event.payload.action | capitalize }} comment
+                            </span>
+                            on "{{ event.payload.issue.title }}"
+                        </span>
                     </span>
                     <span class="badge">[{{ extractRepoName(event.repo.name) }}]</span>
                     <img class="avatar" ng-src="{{ event.actor.avatar_url }}">
