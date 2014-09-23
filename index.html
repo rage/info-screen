@@ -10,6 +10,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.2/angular.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-moment/0.8.2/angular-moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
     <script src="js/infoscreen.js"></script>
 </head>
 
@@ -47,6 +48,26 @@
                     <span class="badge">[{{ extractRepoName(event.repo.name) }}]</span>
                     <img class="avatar" ng-src="{{ event.actor.avatar_url }}">
                     <span class="badge" am-time-ago="event.created_at"></span>
+                </div>
+            </div>
+        </transitionpage>
+
+        <transitionpage>
+            <h1>Unicafe Exactum</h1>
+
+            <div class="cards">
+                <div class="card" ng-repeat="dish in lunches.exactum">
+                    {{ dish }}
+                </div>
+            </div>
+        </transitionpage>
+
+        <transitionpage>
+            <h1>Unicafe Chemicum</h1>
+
+            <div class="cards">
+                <div class="card" ng-repeat="dish in lunches.chemicum">
+                    {{ dish }}
                 </div>
             </div>
         </transitionpage>
