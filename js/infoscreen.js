@@ -69,7 +69,7 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
             $scope.moocCards = res;
         });
 
-        GitHubService.getEvents("kesapojat").success(function(res) {
+        GitHubService.getEvents("rage-research").success(function(res) {
             $scope.gitHubEvents = res;
         });
 
