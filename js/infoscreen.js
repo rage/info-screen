@@ -24,13 +24,22 @@ infoScreenApp.service('GitHubService', function($http) {
     };
 });
 
-infoScreenApp.service('LunchService', function(
-    JsonProxy) {
+infoScreenApp.service('LunchService', function(JsonProxy) {
     var LUNCH_URL = 'http://lounasaika.net/api/v1/menus.json';
 
     return {
         getLunches: function() {
             return JsonProxy.get(LUNCH_URL);
+        }
+    };
+});
+
+infoScreenApp.service('MessageService', function($http) {
+    var MESSAGES_URL = 'http://info-screen-api.herokuapp.com/messages';
+
+    return {
+        getMessages: function() {
+            return $http.get(MESSAGES_URL);
         }
     };
 });
@@ -50,11 +59,12 @@ infoScreenApp.service('JsonProxy', function($http) {
     };
 });
 
-infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, LunchService) {
+infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, LunchService, MessageService) {
     $scope.doingCards = [];
     $scope.moocCards = [];
     $scope.gitHubEvents = [];
     $scope.lunches = {};
+    $scope.messages = [];
 
     $scope.extractRepoName = function(name) {
         return name.split('/')[1];
@@ -77,6 +87,10 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
             var today = (new Date().getDay() + 6) % 7;
             $scope.lunches.exactum = _.find(res, function(n) { return n.name == "Unicafe Exactum"; }).meals.fi[today].json;
             $scope.lunches.chemicum = _.find(res, function(n) { return n.name == "Unicafe Chemicum"; }).meals.fi[today].json;
+        });
+
+        MessageService.getMessages().then(function(res) {
+            $scope.messages = res.data;
         });
     }
 

@@ -61,6 +61,16 @@
         </transition-page>
 
         <transition-page>
+            <h1>Notifications</h1>
+
+            <div class="cards">
+                <div class="card" ng-repeat="message in messages">
+                    {{ message.message }} <span class="badge" am-time-ago="message.timestamp"></span>
+                </div>
+            </div>
+        </transition-page>
+
+        <transition-page>
             <h1>Unicafe Exactum</h1>
 
             <div class="cards">
