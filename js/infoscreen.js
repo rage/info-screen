@@ -65,7 +65,7 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
     $scope.moocCards = [];
     $scope.gitHubEvents = [];
     $scope.lunches = {};
-    $scope.messages = {};
+    $scope.messages = { data: [] };
 
     $scope.extractRepoName = function(name) {
         return name.split('/')[1];
@@ -91,15 +91,19 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
         });
 
         MessageService.getMessages().then(function(res) {
+            res.data.forEach(function(message) {
+                message.timestamp = new Date(message.timestamp);
+            });
+
             if (!_.isEmpty($scope.messages.data) && !_.isEmpty(res.data)) {
-                if (new Date(res.data[0]) > new Date($scope.messages.data[0].timestamp)) {
+                if (_.first(res.data).timestamp > _.first($scope.messages.data).timestamp) {
                     $scope.pageStack.push('notifications');
                 }
             }
 
-            $scope.messages.data = res.data;
-            $scope.messages.latest = _.last(res.data);
             $scope.messages.unread = _.isEqual($scope.messages.data, res.data) ? $scope.messages.data.length : res.data.length - $scope.messages.data.length;
+            $scope.messages.latest = _.first($scope.messages.data);
+            $scope.messages.data = res.data;
         });
     }
 

@@ -65,7 +65,7 @@
 
             <div class="cards">
                 <div class="card" ng-repeat="message in messages.data">
-                    <span class="new" ng-if="message.timestamp >= messages.latest.timestamp">&#9679; </span>{{ message.message }} <span class="badge" am-time-ago="message.timestamp"></span>
+                    <span class="new" ng-if="message.timestamp > messages.latest.timestamp">&#9679; </span>{{ message.message }} <span class="badge" am-time-ago="message.timestamp"></span>
                 </div>
             </div>
         </transition-page>
