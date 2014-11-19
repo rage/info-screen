@@ -60,11 +60,12 @@ infoScreenApp.service('JsonProxy', function($http) {
 });
 
 infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, LunchService, MessageService) {
+    $scope.pageStack = [];
     $scope.doingCards = [];
     $scope.moocCards = [];
     $scope.gitHubEvents = [];
     $scope.lunches = {};
-    $scope.messages = [];
+    $scope.messages = {};
 
     $scope.extractRepoName = function(name) {
         return name.split('/')[1];
@@ -90,7 +91,15 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
         });
 
         MessageService.getMessages().then(function(res) {
-            $scope.messages = res.data;
+            if (!_.isEmpty($scope.messages) && !_.isEmpty(res.data)) {
+                if (new Date(res.data[0]) > new Date($scope.messages.data[0].timestamp)) {
+                    $scope.pageStack.push('notifications');
+                }
+            }
+
+            $scope.messages.data = res.data;
+            $scope.messages.latest = _.last(res.data);
+            $scope.messages.unread = _.isEqual($scope.messages.data, res.data) ? $scope.messages.data.length : res.data.length - $scope.messages.data.length;
         });
     }
 
@@ -144,7 +153,8 @@ infoScreenApp.directive('transitionPages', function() {
     return {
         restrict: 'E',
         scope: {
-            transitionInterval: '=transitionInterval'
+            interval: '=',
+            pageStack: '='
         },
         transclude: true,
         template: '<div ng-transclude></div>',
@@ -152,7 +162,7 @@ infoScreenApp.directive('transitionPages', function() {
         link: function(scope, element, attrs) {
             element.addClass("pt-perspective");
         },
-        
+
         controller: function($scope, $interval) {
             var pages = [];
             var currentPage = 0;
@@ -165,13 +175,30 @@ infoScreenApp.directive('transitionPages', function() {
                 return pages.length !== 0;
             };
 
+            function findPage(name) {
+                for (var i = 0; i < pages.length; i++) {
+                    if (pages[i][0].getAttribute('name') === name) {
+                        return i;
+                    }
+                }
+
+                return -1;
+            }
+
             function changeToNextPage() {
-                oldPage = currentPage;
-                currentPage = (currentPage + 1) % pages.length;
+                var oldPage = currentPage;
+
+                if (!_.isEmpty($scope.pageStack)) {
+                    currentPage = findPage($scope.pageStack.pop());
+                    pages[currentPage].addClass("prioritised");
+                } else {
+                    currentPage = (currentPage + 1) % pages.length;
+                    pages[currentPage].removeClass("prioritised");
+                }
 
                 pages[currentPage].addClass("pt-page-current")
                     .addClass("pt-page-moveFromRight")
-                    .removeClass("pt-page-moveToLeft");
+                    .removeClass("pt-page-moveToLeft")
 
                 pages[oldPage].addClass("pt-page-moveToLeft")
                     .removeClass("pt-page-moveFromRight");
@@ -179,7 +206,7 @@ infoScreenApp.directive('transitionPages', function() {
 
             timeoutId = $interval(function() {
                 changeToNextPage();
-            }, parseInt($scope.transitionInterval));
+            }, parseInt($scope.interval));
         }
     };
 });

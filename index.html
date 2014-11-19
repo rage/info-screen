@@ -17,7 +17,7 @@
 <body ng-controller="InfoScreenCtrl">
     <current-time format="EEE d.M. HH:mm"></current-time>
 
-    <transition-pages transition-interval="10000">
+    <transition-pages interval="10000" page-stack="pageStack">
         <transition-page>
             <h1>Currently doing</h1>
 
@@ -60,12 +60,12 @@
             </div>
         </transition-page>
 
-        <transition-page>
-            <h1>Notifications</h1>
+        <transition-page name='notifications'>
+            <h1 ng-class="{ 'new': messages.unread > 0 }">Notifications ({{ messages.unread }})</h1>
 
             <div class="cards">
-                <div class="card" ng-repeat="message in messages">
-                    {{ message.message }} <span class="badge" am-time-ago="message.timestamp"></span>
+                <div class="card" ng-repeat="message in messages.data">
+                    <span class="new" ng-if="message.timestamp >= messages.latest.timestamp">&#9679; </span>{{ message.message }} <span class="badge" am-time-ago="message.timestamp"></span>
                 </div>
             </div>
         </transition-page>
