@@ -91,7 +91,7 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
         });
 
         MessageService.getMessages().then(function(res) {
-            if (!_.isEmpty($scope.messages) && !_.isEmpty(res.data)) {
+            if (!_.isEmpty($scope.messages.data) && !_.isEmpty(res.data)) {
                 if (new Date(res.data[0]) > new Date($scope.messages.data[0].timestamp)) {
                     $scope.pageStack.push('notifications');
                 }
