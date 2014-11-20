@@ -108,7 +108,7 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
         });
     }
 
-    $interval(update, 1000 * 60 * 1);
+    $interval(update, 1000 * 60 * 5);
     update();
 });
 
