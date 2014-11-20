@@ -1,4 +1,5 @@
 var infoScreenApp = angular.module('infoScreenApp', ['angularMoment']);
+moment.locale('en');
 
 infoScreenApp.service('TrelloService', function($rootScope) {
     Trello.authorize();
@@ -34,12 +35,20 @@ infoScreenApp.service('TravisService', function($http) {
     };
 });
 
-infoScreenApp.service('LunchService', function(JsonProxy) {
-    var LUNCH_URL = 'http://lounasaika.net/api/v1/menus.json';
+infoScreenApp.service('LunchService', function($http) {
+    var LUNCH_URL = 'http://hyy-lounastyokalu-production.herokuapp.com/publicapi/restaurant/';
+
+    function lunchForToday(restaurantData) {
+        var today = moment().format("ddd D.M");
+
+        return _.find(restaurantData.data, function(day) {
+            return day.date_en === today;
+        });
+    }
 
     return {
-        getLunches: function() {
-            return JsonProxy.get(LUNCH_URL);
+        getLunches: function(restaurant) {
+            return $http.get(LUNCH_URL + restaurant).then(function(res) { return lunchForToday(res.data).data; });
         }
     };
 });
@@ -82,21 +91,6 @@ infoScreenApp.service('SoundService', function() {
     };
 });
 
-infoScreenApp.service('JsonProxy', function($http) {
-    return {
-        get: function(url) {
-            var query = {
-                q:      "select * from json where url=\"" + url + "\"",
-                format: "json"
-            };
-
-            return $http
-                .get("https://query.yahooapis.com/v1/public/yql", { params: query })
-                .then(function(res) { return res.data.query.results.json.json; });
-        }
-    };
-});
-
 infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, TravisService, LunchService, NotificationService) {
     $scope.pageStack = [];
     $scope.doingCards = [];
@@ -133,10 +127,12 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
             }).reverse();
         });
 
-        LunchService.getLunches().then(function(res) {
-            var today = (new Date().getDay() + 6) % 7;
-            $scope.lunches.exactum = _.find(res, function(n) { return n.name == "Unicafe Exactum"; }).meals.fi[today].json;
-            $scope.lunches.chemicum = _.find(res, function(n) { return n.name == "Unicafe Chemicum"; }).meals.fi[today].json;
+        LunchService.getLunches(10).then(function(lunches) {
+            $scope.lunches.chemicum = lunches;
+        });
+
+        LunchService.getLunches(11).then(function(lunches) {
+            $scope.lunches.exactum = lunches;
         });
 
         NotificationService.getNotifications().then(function(res) {

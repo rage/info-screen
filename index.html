@@ -85,7 +85,7 @@
 
             <div class="cards">
                 <div class="card" ng-repeat="dish in lunches.exactum">
-                    {{ dish }}
+                    <span ng-if="dish.price.name == 'Maukkaasti'" class="badge">$$</span> {{ dish.name_en }}
                 </div>
             </div>
         </transition-page>
@@ -95,7 +95,7 @@
 
             <div class="cards">
                 <div class="card" ng-repeat="dish in lunches.chemicum">
-                    {{ dish }}
+                    <span ng-if="dish.price.name == 'Maukkaasti'" class="badge">$$</span> {{ dish.name_en }}
                 </div>
             </div>
         </transition-page>
