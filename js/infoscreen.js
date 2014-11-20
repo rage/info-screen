@@ -123,13 +123,13 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
                 notification.timestamp = new Date(notification.timestamp);
             });
 
-            if (res.data && !_.isEqual($scope.notifications.data, res.data)) {
-                $scope.pageStack.push('notifications');
-            }
-
             $scope.notifications.unread = res.data ? Math.max(0, res.data.length - $scope.notifications.data.length) : 0;
             $scope.notifications.lastKnown = _.first($scope.notifications.data);
             $scope.notifications.data = res.data || [];
+
+            if ($scope.notifications.unread > 0) {
+                $scope.pageStack.push('notifications');
+            }
         });
     }
 
