@@ -35,8 +35,7 @@ infoScreenApp.service('LunchService', function(JsonProxy) {
 });
 
 infoScreenApp.service('NotificationService', function($http) {
-    //var NOTIFICATIONS_URL = 'http://info-screen-api.herokuapp.com/notifications';
-    var NOTIFICATIONS_URL = 'http://localhost:9292/notifications/';
+    var NOTIFICATIONS_URL = 'http://info-screen-api.herokuapp.com/notifications';
 
     return {
         getNotifications: function() {
@@ -96,15 +95,13 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
                 notification.timestamp = new Date(notification.timestamp);
             });
 
-            if (!_.isEmpty($scope.notifications.data) && !_.isEmpty(res.data)) {
-                if (_.first(res.data).timestamp > _.first($scope.notifications.data).timestamp) {
-                    $scope.pageStack.push('notifications');
-                }
+            if (res.data && !_.isEqual($scope.notifications.data, res.data)) {
+                $scope.pageStack.push('notifications');
             }
 
-            $scope.notifications.unread = _.isEqual($scope.notifications.data, res.data) ? $scope.notifications.data.length : res.data.length - $scope.notifications.data.length;
+            $scope.notifications.unread = res.data ? Math.max(0, res.data.length - $scope.notifications.data.length) : 0;
             $scope.notifications.lastKnown = _.first($scope.notifications.data);
-            $scope.notifications.data = res.data;
+            $scope.notifications.data = res.data || [];
         });
     }
 

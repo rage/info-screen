@@ -65,7 +65,7 @@
 
             <div class="cards">
                 <div class="card" ng-repeat="notification in notifications.data">
-                    <span class="new" ng-if="notification.timestamp > notifications.lastKnown.timestamp">&#9679; </span>{{ notification.message }} <span class="badge" am-time-ago="notification.timestamp"></span>
+                    <span class="new" ng-if="notifications.unread > 0 && (!notifications.lastKnown || notification.timestamp > notifications.lastKnown.timestamp)">&#9679; </span>{{ notification.message }} <span class="badge" am-time-ago="notification.timestamp"></span>
                 </div>
             </div>
         </transition-page>
