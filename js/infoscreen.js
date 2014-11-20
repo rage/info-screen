@@ -34,12 +34,13 @@ infoScreenApp.service('LunchService', function(JsonProxy) {
     };
 });
 
-infoScreenApp.service('MessageService', function($http) {
-    var MESSAGES_URL = 'http://info-screen-api.herokuapp.com/messages';
+infoScreenApp.service('NotificationService', function($http) {
+    //var NOTIFICATIONS_URL = 'http://info-screen-api.herokuapp.com/notifications';
+    var NOTIFICATIONS_URL = 'http://localhost:9292/notifications/';
 
     return {
-        getMessages: function() {
-            return $http.get(MESSAGES_URL);
+        getNotifications: function() {
+            return $http.get(NOTIFICATIONS_URL);
         }
     };
 });
@@ -59,13 +60,13 @@ infoScreenApp.service('JsonProxy', function($http) {
     };
 });
 
-infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, LunchService, MessageService) {
+infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, LunchService, NotificationService) {
     $scope.pageStack = [];
     $scope.doingCards = [];
     $scope.moocCards = [];
     $scope.gitHubEvents = [];
     $scope.lunches = {};
-    $scope.messages = { data: [] };
+    $scope.notifications = { data: [] };
 
     $scope.extractRepoName = function(name) {
         return name.split('/')[1];
@@ -90,24 +91,24 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
             $scope.lunches.chemicum = _.find(res, function(n) { return n.name == "Unicafe Chemicum"; }).meals.fi[today].json;
         });
 
-        MessageService.getMessages().then(function(res) {
-            res.data.forEach(function(message) {
-                message.timestamp = new Date(message.timestamp);
+        NotificationService.getNotifications().then(function(res) {
+            res.data.forEach(function(notification) {
+                notification.timestamp = new Date(notification.timestamp);
             });
 
-            if (!_.isEmpty($scope.messages.data) && !_.isEmpty(res.data)) {
-                if (_.first(res.data).timestamp > _.first($scope.messages.data).timestamp) {
+            if (!_.isEmpty($scope.notifications.data) && !_.isEmpty(res.data)) {
+                if (_.first(res.data).timestamp > _.first($scope.notifications.data).timestamp) {
                     $scope.pageStack.push('notifications');
                 }
             }
 
-            $scope.messages.unread = _.isEqual($scope.messages.data, res.data) ? $scope.messages.data.length : res.data.length - $scope.messages.data.length;
-            $scope.messages.latest = _.first($scope.messages.data);
-            $scope.messages.data = res.data;
+            $scope.notifications.unread = _.isEqual($scope.notifications.data, res.data) ? $scope.notifications.data.length : res.data.length - $scope.notifications.data.length;
+            $scope.notifications.lastKnown = _.first($scope.notifications.data);
+            $scope.notifications.data = res.data;
         });
     }
 
-    $interval(update, 1000 * 60 * 5);
+    $interval(update, 1000 * 60 * 1);
     update();
 });
 

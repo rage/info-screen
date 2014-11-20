@@ -61,11 +61,11 @@
         </transition-page>
 
         <transition-page name='notifications'>
-            <h1 ng-class="{ 'new': messages.unread > 0 }">Notifications ({{ messages.unread }})</h1>
+            <h1 ng-class="{ 'new': notifications.unread > 0 }">Notifications ({{ notifications.unread }})</h1>
 
             <div class="cards">
-                <div class="card" ng-repeat="message in messages.data">
-                    <span class="new" ng-if="message.timestamp > messages.latest.timestamp">&#9679; </span>{{ message.message }} <span class="badge" am-time-ago="message.timestamp"></span>
+                <div class="card" ng-repeat="notification in notifications.data">
+                    <span class="new" ng-if="notification.timestamp > notifications.lastKnown.timestamp">&#9679; </span>{{ notification.message }} <span class="badge" am-time-ago="notification.timestamp"></span>
                 </div>
             </div>
         </transition-page>
