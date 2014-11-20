@@ -44,6 +44,16 @@ infoScreenApp.service('NotificationService', function($http) {
     };
 });
 
+infoScreenApp.service('SoundService', function() {
+    var notificationAudio = new Audio('sounds/notification.ogg');
+
+    return {
+        playNotificationSound: function() {
+            notificationAudio.play();
+        }
+    };
+});
+
 infoScreenApp.service('JsonProxy', function($http) {
     return {
         get: function(url) {
@@ -165,7 +175,7 @@ infoScreenApp.directive('transitionPages', function() {
             element.addClass("pt-perspective");
         },
 
-        controller: function($scope, $interval) {
+        controller: function($scope, $interval, SoundService) {
             var pages = [];
             var currentPage = 0;
 
@@ -193,6 +203,7 @@ infoScreenApp.directive('transitionPages', function() {
                 if (!_.isEmpty($scope.pageStack)) {
                     currentPage = findPage($scope.pageStack.pop());
                     pages[currentPage].addClass("prioritised");
+                    SoundService.playNotificationSound();
                 } else {
                     currentPage = (currentPage + 1) % pages.length;
                     pages[currentPage].removeClass("prioritised");
