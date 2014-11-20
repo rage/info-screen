@@ -45,7 +45,25 @@ infoScreenApp.service('NotificationService', function($http) {
 });
 
 infoScreenApp.service('SoundService', function() {
-    var notificationAudio = new Audio('sounds/notification.ogg');
+    /*
+     * From http://diveintohtml5.info/everything.html
+     */
+    function isVorbisSupported() {
+        var a = document.createElement('audio');
+        return !!(a.canPlayType && a.canPlayType('audio/ogg; codecs="vorbis"').replace(/no/, ''));
+    }
+
+    function loadAudio(filenameWithoutExtension) {
+        var extension = "ogg";
+
+        if (!isVorbisSupported()) {
+            extension = "mp3";
+        }
+
+        return new Audio(filenameWithoutExtension + "." + extension);
+    }
+
+    var notificationAudio = loadAudio('sounds/notification');
 
     return {
         playNotificationSound: function() {
