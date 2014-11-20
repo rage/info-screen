@@ -24,8 +24,29 @@ h1, current-time {
 }
 
 .pt-page-current.prioritised h1.new {
-    transition: background-color 1s ease-in;
-    background-color: lightgreen;
+    animation: new 3s;
+    -webkit-animation: new 3s;
+}
+
+/* 100 / 6 doesn't divide to an integer */
+@-webkit-keyframes new {
+    0% { background-color: black; }
+    15% { background-color: green; }
+    30% { background-color: black; }
+    45% { background-color: green; }
+    60% { background-color: black; }
+    75% { background-color: green; }
+    90% { background-color: black; }
+}
+
+@keyframes new {
+    0% { background-color: black; }
+    15% { background-color: green; }
+    30% { background-color: black; }
+    45% { background-color: green; }
+    60% { background-color: black; }
+    75% { background-color: green; }
+    90% { background-color: black; }
 }
 
 current-time {
