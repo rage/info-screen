@@ -67,6 +67,18 @@ current-time {
 	display: inline-block;
 }
 
+.card .build {
+    color: lightgray;
+}
+
+.card .pass {
+    color: lightgreen;
+}
+
+.card .fail {
+    color: red;
+}
+
 /* stolen from */
 .pt-perspective {
     position: relative;

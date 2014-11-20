@@ -24,6 +24,16 @@ infoScreenApp.service('GitHubService', function($http) {
     };
 });
 
+infoScreenApp.service('TravisService', function($http) {
+    var TRAVIS_ROOT = 'https://api.travis-ci.org';
+
+    return {
+        getRepositories: function(org) {
+            return $http.get(TRAVIS_ROOT + '/repos/' + org + '.json');
+        }
+    };
+});
+
 infoScreenApp.service('LunchService', function(JsonProxy) {
     var LUNCH_URL = 'http://lounasaika.net/api/v1/menus.json';
 
@@ -87,11 +97,12 @@ infoScreenApp.service('JsonProxy', function($http) {
     };
 });
 
-infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, LunchService, NotificationService) {
+infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, TravisService, LunchService, NotificationService) {
     $scope.pageStack = [];
     $scope.doingCards = [];
     $scope.moocCards = [];
     $scope.gitHubEvents = [];
+    $scope.travisRepositories = [];
     $scope.lunches = {};
     $scope.notifications = { data: [] };
 
@@ -110,6 +121,16 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
 
         GitHubService.getEvents("rage").success(function(res) {
             $scope.gitHubEvents = res;
+        });
+
+        TravisService.getRepositories("rage").success(function(res) {
+            $scope.travisRepositories = _.reject(res, function(repository) {
+                return !repository['last_build_id'];
+            });
+
+            $scope.travisRepositories = _.sortBy($scope.travisRepositories, function(repository) {
+                return new Date(repository['last_build_finished_at']);
+            }).reverse();
         });
 
         LunchService.getLunches().then(function(res) {

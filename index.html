@@ -60,6 +60,16 @@
             </div>
         </transition-page>
 
+        <transition-page name='travis'>
+            <h1>Travis</h1>
+
+            <div class="cards">
+                <div class="card" ng-repeat="repository in travisRepositories">
+                    <span class='build' ng-class="{ 'pass': repository['last_build_result'] === 0, 'fail': repository['last_build_result'] === 1  }">&#9679; </span>{{ repository.slug }} <span class="badge" am-time-ago="repository['last_build_finished_at']"></span>
+                </div>
+            </div>
+        </transition-page>
+
         <transition-page name='notifications'>
             <h1 ng-class="{ 'new': notifications.unread > 0 }">Notifications ({{ notifications.unread }})</h1>
 
