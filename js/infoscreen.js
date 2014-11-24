@@ -35,6 +35,16 @@ infoScreenApp.service('TravisService', function($http) {
     };
 });
 
+infoScreenApp.service('CoverageService', function($http) {
+    var COVERAGE_ROOT = 'https://info-screen-api.herokuapp.com/coverages';
+
+    return {
+        getCoverages: function() {
+            return $http.get(COVERAGE_ROOT);
+        }
+    }
+});
+
 infoScreenApp.service('LunchService', function($http) {
     var LUNCH_URL = 'http://hyy-lounastyokalu-production.herokuapp.com/publicapi/restaurant/';
 
@@ -91,12 +101,13 @@ infoScreenApp.service('SoundService', function() {
     };
 });
 
-infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, TravisService, LunchService, NotificationService) {
+infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloService, GitHubService, TravisService, CoverageService, LunchService, NotificationService) {
     $scope.pageStack = [];
     $scope.doingCards = [];
     $scope.moocCards = [];
     $scope.gitHubEvents = [];
     $scope.travisRepositories = [];
+    $scope.coverages = {};
     $scope.lunches = {};
     $scope.notifications = { data: [] };
 
@@ -125,6 +136,15 @@ infoScreenApp.controller('InfoScreenCtrl', function ($scope, $interval, TrelloSe
             $scope.travisRepositories = _.sortBy($scope.travisRepositories, function(repository) {
                 return new Date(repository['last_build_finished_at']);
             }).reverse();
+        });
+
+        CoverageService.getCoverages().then(function(res) {
+            var data = res.data || [];
+
+            $scope.coverages = _.inject(data, function(result, element) {
+                result[element.name] = element;
+                return result;
+            }, {});
         });
 
         LunchService.getLunches(10).then(function(lunches) {

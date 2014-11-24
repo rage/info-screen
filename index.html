@@ -65,7 +65,7 @@
 
             <div class="cards">
                 <div class="card" ng-repeat="repository in travisRepositories">
-                    <span class='build' ng-class="{ 'pass': repository['last_build_result'] === 0, 'fail': repository['last_build_result'] === 1  }">&#9679; </span>{{ repository.slug }} <span class="badge" am-time-ago="repository['last_build_finished_at']"></span>
+                    <span class='build' ng-class="{ 'pass': repository['last_build_result'] === 0, 'fail': repository['last_build_result'] === 1  }">&#9679; </span>{{ repository.slug }} <span ng-if="coverages[repository.slug]">({{ coverages[repository.slug].coverage }})</span> <span class="badge" am-time-ago="repository['last_build_finished_at']"></span>
                 </div>
             </div>
         </transition-page>
