@@ -49,7 +49,7 @@ infoScreenApp.service('LunchService', function($http) {
     var LUNCH_URL = 'http://hyy-lounastyokalu-production.herokuapp.com/publicapi/restaurant/';
 
     function lunchForToday(restaurantData) {
-        var today = moment().format("ddd D.M");
+        var today = moment().format("ddd DD.MM");
 
         return _.find(restaurantData.data, function(day) {
             return day.date_en === today;
