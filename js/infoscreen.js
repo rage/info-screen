@@ -2,7 +2,7 @@ var infoScreenApp = angular.module('infoScreenApp', ['angularMoment']);
 moment.locale('en');
 
 infoScreenApp.service('TrelloService', function($rootScope) {
-    Trello.authorize();
+    Trello.authorize({'expiration': 'never'});
 
     return {
         getCards: function(listId, success) {
